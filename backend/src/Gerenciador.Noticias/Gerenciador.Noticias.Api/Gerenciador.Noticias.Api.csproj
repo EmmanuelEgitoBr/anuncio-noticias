@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>6082e739-a49e-478d-9617-a72992f5b26e</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gerenciador.Noticias.Application\Gerenciador.Noticias.Application.csproj" />
+    <ProjectReference Include="..\Gerenciador.Noticias.Domain\Gerenciador.Noticias.Domain.csproj" />
+    <ProjectReference Include="..\Gerenciador.Noticias.Infra.Mongo\Gerenciador.Noticias.Infra.Mongo.csproj" />
+    <ProjectReference Include="..\Gerenciador.Noticias.Infra.Sql\Gerenciador.Noticias.Infra.Sql.csproj" />
+  </ItemGroup>
+
+</Project>

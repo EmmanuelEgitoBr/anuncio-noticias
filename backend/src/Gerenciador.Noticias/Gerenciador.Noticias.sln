@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gerenciador.Noticias.Api", "Gerenciador.Noticias.Api\Gerenciador.Noticias.Api.csproj", "{D9AE708E-A7E3-43CD-8351-16937627C3E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gerenciador.Noticias.Domain", "Gerenciador.Noticias.Domain\Gerenciador.Noticias.Domain.csproj", "{5053E190-988C-4909-ABFD-1663164A255C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gerenciador.Noticias.Infra.Mongo", "Gerenciador.Noticias.Infra.Mongo\Gerenciador.Noticias.Infra.Mongo.csproj", "{A2F66290-44B5-4A09-BAC6-B1232CDFB08A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gerenciador.Noticias.Application", "Gerenciador.Noticias.Application\Gerenciador.Noticias.Application.csproj", "{4708B693-BB47-420F-8FAB-B7CF17C11D11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gerenciador.Noticias.Infra.Sql", "Gerenciador.Noticias.Infra.Sql\Gerenciador.Noticias.Infra.Sql.csproj", "{AC8EEC85-0F70-4BE6-8F4D-9E5B840FD182}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9AE708E-A7E3-43CD-8351-16937627C3E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9AE708E-A7E3-43CD-8351-16937627C3E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9AE708E-A7E3-43CD-8351-16937627C3E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9AE708E-A7E3-43CD-8351-16937627C3E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5053E190-988C-4909-ABFD-1663164A255C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5053E190-988C-4909-ABFD-1663164A255C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5053E190-988C-4909-ABFD-1663164A255C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5053E190-988C-4909-ABFD-1663164A255C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F66290-44B5-4A09-BAC6-B1232CDFB08A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F66290-44B5-4A09-BAC6-B1232CDFB08A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F66290-44B5-4A09-BAC6-B1232CDFB08A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F66290-44B5-4A09-BAC6-B1232CDFB08A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4708B693-BB47-420F-8FAB-B7CF17C11D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4708B693-BB47-420F-8FAB-B7CF17C11D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4708B693-BB47-420F-8FAB-B7CF17C11D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4708B693-BB47-420F-8FAB-B7CF17C11D11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC8EEC85-0F70-4BE6-8F4D-9E5B840FD182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8EEC85-0F70-4BE6-8F4D-9E5B840FD182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8EEC85-0F70-4BE6-8F4D-9E5B840FD182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8EEC85-0F70-4BE6-8F4D-9E5B840FD182}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
