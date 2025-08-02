@@ -19,11 +19,11 @@ public class News : BaseEntity
     [BsonElement("link")]
     public string Link {  get; set; } = string.Empty;
     [BsonElement("publishDate")]
-    public DateTime PublishDate { get; set; }
+    public DateTime PublishDate { get; set; } = DateTime.Now;
     [BsonElement("status")]
     public Status Status { get; set; }
 
-    public News(string hat, string title, string text, string author, string image, string link, DateTime publishDate, Status status)
+    public News(string hat, string title, string text, string author, string image, string link, Status status)
     {
         Hat = hat;
         Title = title;
@@ -31,7 +31,6 @@ public class News : BaseEntity
         Author = author;
         Image = image;
         Link = link;
-        PublishDate = publishDate;
         Status = status;
     }
 

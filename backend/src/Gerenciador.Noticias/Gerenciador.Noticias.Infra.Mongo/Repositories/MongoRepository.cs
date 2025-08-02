@@ -13,21 +13,35 @@ public class MongoRepository<T> : IMongoRepository<T> where T : BaseEntity
     {
         var client = new MongoClient(settings.ConnectionString);
         var database = client.GetDatabase(settings.DatabaseName);
-
         _repository = database.GetCollection<T>(typeof(T).Name.ToLower());
     }
 
-    public List<T> Get() => _repository.Find(active => true).ToList();
-    public T GetById(string id) =>
-        _repository.Find<T>(news => news.Id == id).FirstOrDefault();
-
-    public T Create(T news)
+    public async Task<List<T>> GetAsync()
     {
-        _repository.InsertOne(news);
-        return news;
+        var result = await _repository.FindAsync(_ => true);
+        return await result.ToListAsync();
     }
 
-    public void Update(string id, T newsIn) => _repository.ReplaceOne(news => news.Id == id, newsIn);
+    public async Task<T?> GetByIdAsync(string id)
+    {
+        var result = await _repository.FindAsync(x => x.Id == id);
+        return await result.FirstOrDefaultAsync();
+    }
 
-    public void Remove(string id) => _repository.DeleteOne(news => news.Id == id);
+    public async Task<T> CreateAsync(T entity)
+    {
+        await _repository.InsertOneAsync(entity);
+        return entity;
+    }
+
+    public async Task UpdateAsync(string id, T entity)
+    {
+        await _repository.ReplaceOneAsync(x => x.Id == id, entity);
+    }
+
+    public async Task RemoveAsync(string id)
+    {
+        await _repository.DeleteOneAsync(x => x.Id == id);
+    }
 }
+
