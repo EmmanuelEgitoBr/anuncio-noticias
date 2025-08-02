@@ -9,7 +9,7 @@ public class MongoRepository<T> : IMongoRepository<T> where T : BaseEntity
 {
     private readonly IMongoCollection<T> _repository;
 
-    public MongoRepository(IDatabaseSettings settings)
+    public MongoRepository(IMongoDatabaseSettings settings)
     {
         var client = new MongoClient(settings.ConnectionString);
         var database = client.GetDatabase(settings.DatabaseName);
