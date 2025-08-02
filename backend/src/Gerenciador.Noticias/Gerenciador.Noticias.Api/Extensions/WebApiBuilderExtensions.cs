@@ -4,6 +4,8 @@ using Gerenciador.Noticias.Application.Services.Interfaces;
 using Gerenciador.Noticias.Domain.Interfaces;
 using Gerenciador.Noticias.Infra.Mongo.Repositories;
 using Gerenciador.Noticias.Infra.Mongo.Settings;
+using Gerenciador.Noticias.Infra.Sql.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
@@ -28,7 +30,7 @@ public static class WebApiBuilderExtensions
     public static void AddMongoConfig(this WebApplicationBuilder builder)
     {
         builder.Services.Configure<MongoDatabaseSettings>(
-            builder.Configuration.GetSection("DatabaseSettings"));
+            builder.Configuration.GetSection("MongoDatabaseSettings"));
 
         builder.Services.AddSingleton<IMongoDatabaseSettings>(sp =>
             sp.GetRequiredService<IOptions<MongoDatabaseSettings>>().Value);
@@ -59,12 +61,12 @@ public static class WebApiBuilderExtensions
         });
     }
 
-    //public static void AddSqlConfiguration(this WebApplicationBuilder builder)
-    //{
-    //    builder.Services.AddDbContext<AppDbContext>(options =>
-    //    {
-    //        options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
-    //        options.EnableSensitiveDataLogging();
-    //    });
-    //}
+    public static void AddSqlConfiguration(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
+            options.EnableSensitiveDataLogging();
+        });
+    }
 }

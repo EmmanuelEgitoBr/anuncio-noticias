@@ -4,7 +4,7 @@ namespace Gerenciador.Noticias.Application.Dtos;
 
 public class NewsDto
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string? Id { get; set; }
     public string Hat { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Text { get; set; } = string.Empty;
