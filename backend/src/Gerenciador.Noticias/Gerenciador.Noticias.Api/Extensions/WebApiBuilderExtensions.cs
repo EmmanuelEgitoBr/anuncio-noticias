@@ -5,7 +5,9 @@ using Gerenciador.Noticias.Domain.Interfaces;
 using Gerenciador.Noticias.Infra.Mongo.Repositories;
 using Gerenciador.Noticias.Infra.Mongo.Settings;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using System;
+using System.Reflection;
 
 namespace Gerenciador.Noticias.Api.Extensions;
 
@@ -30,6 +32,31 @@ public static class WebApiBuilderExtensions
 
         builder.Services.AddSingleton<IMongoDatabaseSettings>(sp =>
             sp.GetRequiredService<IOptions<MongoDatabaseSettings>>().Value);
+    }
+
+    public static void AddSwaggerDoc(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "API de gerenciamento de notícias",
+                Description = "API feita com .NET Core 9 usando MongoDB",
+                Contact = new OpenApiContact
+                {
+                    Name = "Página de contato",
+                    Url = new Uri("https://www.google.com")
+                },
+                License = new OpenApiLicense
+                {
+                    Name = "Licenciamento",
+                    Url = new Uri("https://www.google.com")
+                }
+            });
+            var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+        });
     }
 
     //public static void AddSqlConfiguration(this WebApplicationBuilder builder)
