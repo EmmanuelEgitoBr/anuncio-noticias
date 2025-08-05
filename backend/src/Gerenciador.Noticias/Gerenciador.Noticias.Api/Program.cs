@@ -1,6 +1,10 @@
 using Gerenciador.Noticias.Api.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    WebRootPath = "wwwroot", // Define explicitamente
+    Args = args              // Repassa os argumentos da linha de comando
+});
 
 // Add services to the container.
 
@@ -15,6 +19,8 @@ builder.AddCorsConfig();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseStaticFiles();
 
 app.UseSwagger();
 app.UseSwaggerUI();

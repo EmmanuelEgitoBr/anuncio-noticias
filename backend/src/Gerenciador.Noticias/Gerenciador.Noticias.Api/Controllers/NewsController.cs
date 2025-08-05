@@ -9,10 +9,12 @@ namespace Gerenciador.Noticias.Api.Controllers
     public class NewsController : ControllerBase
     {
         private readonly INewsService _newsService;
+        private readonly IWebHostEnvironment _environment;
 
-        public NewsController(INewsService newsService)
+        public NewsController(INewsService newsService, IWebHostEnvironment environment)
         {
             _newsService = newsService;
+            _environment = environment;
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace Gerenciador.Noticias.Api.Controllers
         {
             var result = await _newsService.CreateNewsAsync(news);
 
-            return CreatedAtRoute("GetNews", new { id = result.Id.ToString() }, result);
+            return CreatedAtRoute("GetNews", new { id = result.Id!.ToString() }, result);
         }
 
         /// <summary>
@@ -88,9 +90,60 @@ namespace Gerenciador.Noticias.Api.Controllers
             if (news is null)
                 return NotFound();
 
-            await _newsService.RemoveNewsAsync(news.Id);
+            await _newsService.RemoveNewsAsync(news.Id!);
 
             return Ok("Noticia deletada com sucesso!");
+        }
+
+        /// <summary>
+        /// Endpoint para upload de imagem para uma notícia
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/upload-image")]
+        public async Task<IActionResult> UploadImage(string id, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("Nenhum arquivo enviado.");
+
+            // Apenas extensões válidas
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(extension))
+                return BadRequest("Extensão de arquivo inválida.");
+
+            // Nome único para o arquivo
+            var fileName = $"{Guid.NewGuid()}{extension}";
+            var imagePath = Path.Combine(_environment.WebRootPath, "images");
+
+            if (!Directory.Exists(imagePath))
+                Directory.CreateDirectory(imagePath);
+
+            var filePath = Path.Combine(imagePath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var imageUrl = $"{Request.Scheme}://{Request.Host}/images/{fileName}";
+
+            // Exemplo: atualizar no banco de dados
+            var newsDto = await _newsService.GetNewsByIdAsync(id);
+            if (newsDto == null) return NotFound();
+            
+            newsDto.Image = imageUrl;
+            newsDto.Link = imageUrl;
+
+            await _newsService.UpdateNewsAsync(id, newsDto);
+
+            return Ok(new
+            {
+                message = "Imagem enviada com sucesso.",
+                imageUrl
+            });
         }
     }
 }
