@@ -36,6 +36,21 @@ public static class WebApiBuilderExtensions
             sp.GetRequiredService<IOptions<MongoDatabaseSettings>>().Value);
     }
 
+    public static void AddCorsConfig(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAngular",
+                policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:4200") // endereço do Angular
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+        });
+    }
+
     public static void AddSwaggerDoc(this WebApplicationBuilder builder)
     {
         builder.Services.AddSwaggerGen(options =>

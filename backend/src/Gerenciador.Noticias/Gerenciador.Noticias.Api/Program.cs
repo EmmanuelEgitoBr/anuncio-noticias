@@ -10,6 +10,7 @@ builder.AddApplicationConfig();
 builder.AddMongoConfig();
 builder.AddSqlConfiguration();
 builder.AddSwaggerDoc();
+builder.AddCorsConfig();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
