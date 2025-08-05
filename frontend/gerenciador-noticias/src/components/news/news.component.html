@@ -1,0 +1,67 @@
+<div class="container mt-4">
+  <h2>News Management</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Hat</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let news of newsList">
+        <td>{{ news.hat }}</td>
+        <td>{{ news.title }}</td>
+        <td>{{ news.author }}</td>
+        <td>{{ news.status }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" (click)="openEditModal(editModal, news)">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-danger" (click)="delete(news.id!)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #editModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Edit News</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      <label class="form-label">Hat</label>
+      <input type="text" class="form-control" [(ngModel)]="selectedNews.hat">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input type="text" class="form-control" [(ngModel)]="selectedNews.title">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Text</label>
+      <textarea class="form-control" [(ngModel)]="selectedNews.text"></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Author</label>
+      <input type="text" class="form-control" [(ngModel)]="selectedNews.author">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Status</label>
+      <select class="form-select" [(ngModel)]="selectedNews.status">
+        <option [ngValue]="0">Draft</option>
+        <option [ngValue]="1">Published</option>
+        <option [ngValue]="2">Archived</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button class="btn btn-primary" (click)="save(); modal.close('Save')">Save</button>
+  </div>
+</ng-template>
