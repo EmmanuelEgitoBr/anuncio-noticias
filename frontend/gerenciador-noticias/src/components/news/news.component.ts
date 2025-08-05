@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { News, NewsService } from './news.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,11 +21,16 @@ export class NewsComponent implements OnInit {
 
   constructor(
     private newsService: NewsService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.loadNews();
+  }
+
+  goToCreate(): void {
+    this.router.navigate(['/news/create']);
   }
 
   loadNews() {
@@ -52,7 +58,7 @@ export class NewsComponent implements OnInit {
       console.error(err);
       alert('Erro ao fazer upload da imagem.');
     });
-}
+  }
 
   openEditModal(content: TemplateRef<any>, news: News) {
     this.selectedNews = { ...news };
