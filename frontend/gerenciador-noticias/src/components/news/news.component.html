@@ -1,18 +1,16 @@
 <div class="container mt-4">
-  <h2>News Management</h2>
+  <h2>Gerenciador de Notícias</h2>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Hat</th>
-        <th>Title</th>
-        <th>Author</th>
+        <th>Título</th>
+        <th>Autor</th>
         <th>Status</th>
-        <th>Actions</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let news of newsList">
-        <td>{{ news.hat }}</td>
         <td>{{ news.title }}</td>
         <td>{{ news.author }}</td>
         <td>{{ Status[news.status] }}</td>
@@ -31,24 +29,24 @@
 
 <ng-template #editModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Edit News</h4>
+    <h4 class="modal-title">Editar Notícia</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
     <div class="mb-3">
-      <label class="form-label">Hat</label>
+      <label class="form-label">Chapéu</label>
       <input type="text" class="form-control" [(ngModel)]="selectedNews.hat">
     </div>
     <div class="mb-3">
-      <label class="form-label">Title</label>
+      <label class="form-label">Título</label>
       <input type="text" class="form-control" [(ngModel)]="selectedNews.title">
     </div>
     <div class="mb-3">
-      <label class="form-label">Text</label>
+      <label class="form-label">Texto</label>
       <textarea class="form-control" [(ngModel)]="selectedNews.text"></textarea>
     </div>
     <div class="mb-3">
-      <label class="form-label">Author</label>
+      <label class="form-label">Autor(es)</label>
       <input type="text" class="form-control" [(ngModel)]="selectedNews.author">
     </div>
     <div class="mb-3">
