@@ -1,6 +1,9 @@
 ﻿using Gerenciador.Noticias.Application.Dtos;
 using Gerenciador.Noticias.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Webp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Gerenciador.Noticias.Api.Controllers
 {
@@ -115,20 +118,24 @@ namespace Gerenciador.Noticias.Api.Controllers
                 return BadRequest("Extensão de arquivo inválida.");
 
             // Nome único para o arquivo
-            var fileName = $"{Guid.NewGuid()}{extension}";
+            var webpFileName = $"{Guid.NewGuid()}.webp";
             var imagePath = Path.Combine(_environment.WebRootPath, "images");
 
             if (!Directory.Exists(imagePath))
                 Directory.CreateDirectory(imagePath);
 
-            var filePath = Path.Combine(imagePath, fileName);
+            var webpFilePath = Path.Combine(imagePath, webpFileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            using (var image = await Image.LoadAsync(file.OpenReadStream()))
             {
-                await file.CopyToAsync(stream);
+                image.Mutate(x => x.AutoOrient()); // Corrige rotação
+                await image.SaveAsync(webpFilePath, new WebpEncoder
+                {
+                    Quality = 75 // Ajuste de compressão (0 a 100)
+                });
             }
 
-            var imageUrl = $"{Request.Scheme}://{Request.Host}/images/{fileName}";
+            var imageUrl = $"{Request.Scheme}://{Request.Host}/images/{webpFileName}";
 
             // Exemplo: atualizar no banco de dados
             var newsDto = await _newsService.GetNewsByIdAsync(id);
