@@ -135,8 +135,7 @@ namespace Gerenciador.Noticias.Api.Controllers
             if (newsDto == null) return NotFound();
             
             newsDto.Image = imageUrl;
-            newsDto.Link = imageUrl;
-
+            
             await _newsService.UpdateNewsAsync(id, newsDto);
 
             return Ok(new

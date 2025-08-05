@@ -8,6 +8,7 @@ export interface News {
   title: string;
   text: string;
   author: string;
+  publishDate: Date;
   image: string;
   link: string;
   status: number;

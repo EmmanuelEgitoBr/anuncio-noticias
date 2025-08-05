@@ -10,7 +10,6 @@ public class NewsDto
     public string Title { get; set; } = string.Empty;
     public string Text { get; set; } = string.Empty;
     public string Author { get; set; } = string.Empty;
-    [JsonIgnore]
     public DateTime PublishDate {  get; set; }
     public string Image { get; set; } = string.Empty;
     public string Link { get; set; } = string.Empty;

@@ -31,6 +31,29 @@ export class NewsComponent implements OnInit {
     this.newsService.getAll().subscribe(data => this.newsList = data);
   }
 
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0 || !this.selectedNews.id) return;
+
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch(`https://localhost:7118/api/news/${this.selectedNews.id}/upload-image`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(async response => {
+      if (!response.ok) throw new Error('Falha ao enviar imagem.');
+      const result = await response.json(); // supondo que o retorno contenha a nova URL
+      this.selectedNews.image = result.url || this.selectedNews.image;
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Erro ao fazer upload da imagem.');
+    });
+}
+
   openEditModal(content: TemplateRef<any>, news: News) {
     this.selectedNews = { ...news };
     this.modalService.open(content);
@@ -52,6 +75,7 @@ export class NewsComponent implements OnInit {
       title: '',
       text: '',
       author: '',
+      publishDate: new Date(),
       image: '',
       link: '',
       status: 0
