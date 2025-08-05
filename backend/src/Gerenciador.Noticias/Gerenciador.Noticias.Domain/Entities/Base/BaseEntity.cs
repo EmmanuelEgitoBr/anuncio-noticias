@@ -8,5 +8,7 @@ namespace Gerenciador.Noticias.Domain.Entities.Base
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
+        public bool IsDeleted { get; set; }
+        public string Slug { get; set; } = string.Empty;
     }
 }

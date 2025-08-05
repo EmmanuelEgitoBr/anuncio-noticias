@@ -1,5 +1,7 @@
 ﻿using Gerenciador.Noticias.Domain.Entities.Base;
 using Gerenciador.Noticias.Domain.Enums;
+using Gerenciador.Noticias.Domain.Helpers;
+using Gerenciador.Noticias.Domain.Validators;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Gerenciador.Noticias.Domain.Entities;
@@ -7,11 +9,11 @@ namespace Gerenciador.Noticias.Domain.Entities;
 public class News : BaseEntity
 {
     [BsonElement("hat")]
-    public string Hat { get; set; } = string.Empty;
+    public string Hat { get; set; }
     [BsonElement("title")]
-    public string Title { get; set; } = string.Empty;
+    public string Title { get; set; }
     [BsonElement("text")]
-    public string Text {  get; set; } = string.Empty;
+    public string Text {  get; set; }
     [BsonElement("author")]
     public string Author {  get; set; } = string.Empty;
     [BsonElement("image")]
@@ -31,7 +33,10 @@ public class News : BaseEntity
         Author = author;
         Image = image;
         Link = link;
+        Slug = SlugHelper.GenerateSlug(Title);
         Status = status;
+
+        ValidateEntity();
     }
 
     public Status ChangeStatus(Status status) =>
@@ -42,4 +47,14 @@ public class News : BaseEntity
         Status.Draft => Status.Draft,
         _ => status // ou lançar exceção, se necessário
     };
+
+    public void ValidateEntity()
+    {
+        AssertionConcern.AssertArgumentNotEmpty(Hat, "Chapéu não pode ser vazio");
+        AssertionConcern.AssertArgumentNotEmpty(Title, "Título não pode ser vazio");
+        AssertionConcern.AssertArgumentNotEmpty(Text, "Texto não pode ser vazio");
+
+        AssertionConcern.AssertArgumentLength(Title, 90, "O título não pode ultrapassar 40 caracteres");
+        AssertionConcern.AssertArgumentLength(Hat, 40, "O chapéu não pode ultrapassar 40 caracteres");
+    }
 }
