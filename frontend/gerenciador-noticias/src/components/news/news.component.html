@@ -15,12 +15,12 @@
         <td>{{ news.hat }}</td>
         <td>{{ news.title }}</td>
         <td>{{ news.author }}</td>
-        <td>{{ news.status }}</td>
+        <td>{{ Status[news.status] }}</td>
         <td>
-          <button class="btn btn-sm btn-primary" (click)="openEditModal(editModal, news)">
+          <button class="btn btn-sm btn-primary  px-1 py-0" (click)="openEditModal(editModal, news)">
             <i class="bi bi-pencil"></i>
           </button>
-          <button class="btn btn-sm btn-danger" (click)="delete(news.id!)">
+          <button class="btn btn-sm btn-danger  px-1 py-0" (click)="delete(news.id!)">
             <i class="bi bi-trash"></i>
           </button>
         </td>

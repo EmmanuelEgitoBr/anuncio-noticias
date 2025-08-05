@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { Status } from './status.enum';
+
 @Component({
   selector: 'app-news',
   imports: [CommonModule, FormsModule, NgbModule],
@@ -14,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 export class NewsComponent implements OnInit {
   newsList: News[] = [];
   selectedNews: News = this.initNews();
+  Status = Status
 
   constructor(
     private newsService: NewsService,
