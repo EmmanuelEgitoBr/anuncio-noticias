@@ -9,7 +9,6 @@ namespace Gerenciador.Noticias.Application.Services;
 public class NewsService : INewsService
 {
     private readonly IMapper _mapper;
-
     private readonly IMongoRepository<News> _repository;
 
     public NewsService(IMongoRepository<News> repository, IMapper mapper)

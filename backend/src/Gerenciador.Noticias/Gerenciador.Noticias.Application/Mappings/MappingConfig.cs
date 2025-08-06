@@ -9,5 +9,6 @@ public class MappingConfig : Profile
     public MappingConfig()
     {
         CreateMap<News, NewsDto>().ReverseMap();
+        CreateMap<Video, VideoDto>().ReverseMap();
     }
 }
