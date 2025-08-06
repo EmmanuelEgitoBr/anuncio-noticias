@@ -22,6 +22,32 @@ public class MongoRepository<T> : IMongoRepository<T> where T : BaseEntity
         return await result.ToListAsync();
     }
 
+    public async Task<(List<T> Items, long Total)> GetPagedAsync(
+    FilterDefinition<T> filter,
+    SortDefinition<T> sort,
+    int page,
+    int pageSize)
+    {
+        page = page < 1 ? 1 : page;
+        pageSize = pageSize > 100 ? 100 : pageSize;
+
+        var total = await _repository.CountDocumentsAsync(filter);
+
+        var items = await _repository.Find(filter)
+            .Sort(sort)
+            .Skip((page - 1) * pageSize)
+            .Limit(pageSize)
+            .ToListAsync();
+
+        return (items, total);
+    }
+
+    public async Task<long> CountAsync(FilterDefinition<T> filter)
+    {
+        return await _repository.CountDocumentsAsync(filter);
+    }
+
+
     public async Task<T?> GetByIdAsync(string id)
     {
         var result = await _repository.FindAsync(x => x.Id == id);

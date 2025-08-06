@@ -1,4 +1,5 @@
 ﻿using Gerenciador.Noticias.Application.Dtos;
+using Gerenciador.Noticias.Application.Dtos.Filters;
 using Gerenciador.Noticias.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,17 @@ namespace Gerenciador.Noticias.Api.Controllers
         public async Task<ActionResult> GetAllNews()
         {
             var result = await _newsService.GetNewsListAsync();
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Endpoint que retorna a lista com todas as notícias
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPagedNews([FromQuery] NewsPaginationFilter filter)
+        {
+            var result = await _newsService.GetPaginatedNewsListAsync(filter);
             return Ok(result);
         }
 
