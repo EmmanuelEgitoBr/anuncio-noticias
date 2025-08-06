@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Gerenciador.Noticias.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
@@ -10,10 +11,12 @@ namespace Gerenciador.Noticias.Api.Controllers
     public class FilesController : ControllerBase
     {
         private readonly IWebHostEnvironment _environment;
+        private readonly INewsService _newsService;
 
-        public FilesController(IWebHostEnvironment environment)
+        public FilesController(IWebHostEnvironment environment, INewsService newsService)
         {
             _environment = environment;
+            _newsService = newsService;
         }
 
         /// <summary>
@@ -28,7 +31,14 @@ namespace Gerenciador.Noticias.Api.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest("Nenhum arquivo enviado.");
 
-            // Apenas extensões válidas
+            var newsDto = await _newsService.GetNewsByIdAsync(id);
+            if (newsDto == null) return NotFound();
+
+            if (newsDto.Media == Domain.Enums.MediaType.Video)
+            {
+                return BadRequest("Válido somente para imagens!!.");
+            }
+
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
@@ -55,19 +65,27 @@ namespace Gerenciador.Noticias.Api.Controllers
 
             var imageUrl = $"{Request.Scheme}://{Request.Host}/images/{webpFileName}";
 
-            // Exemplo: atualizar no banco de dados
-            //var newsDto = await _newsService.GetNewsByIdAsync(id);
-            //if (newsDto == null) return NotFound();
-            //
-            //newsDto.Image = imageUrl;
-            //
-            //await _newsService.UpdateNewsAsync(id, newsDto);
+            newsDto.ImageUrl = imageUrl;
+            
+            await _newsService.UpdateNewsAsync(id, newsDto);
 
             return Ok(new
             {
                 message = "Imagem enviada com sucesso.",
                 imageUrl
             });
+        }
+
+        /// <summary>
+        /// Endpoint para upload de vídeo para uma notícia
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/upload-video")]
+        public IActionResult UploadVideo(string id, IFormFile file)
+        {
+            return Ok();
         }
     }
 }

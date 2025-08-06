@@ -91,7 +91,15 @@ public class NewsService : INewsService
 
     public async Task<NewsDto> CreateNewsAsync(NewsDto newsDto)
     {
-        var entity = new News(newsDto.Summary, newsDto.Title, newsDto.Text!, newsDto.Author, newsDto.ImageUrl, newsDto.Link!, newsDto.Status);
+        var entity = new News(newsDto.Summary, 
+            newsDto.Title, 
+            newsDto.Text!, 
+            newsDto.Author, 
+            newsDto.ImageUrl, 
+            newsDto.Link!,
+            newsDto.CategoryId,
+            newsDto.Media,
+            newsDto.Status);
         await _repository.CreateAsync(entity);
 
         return _mapper.Map<NewsDto>(entity);

@@ -28,7 +28,7 @@ namespace Gerenciador.Noticias.Api.Controllers
         }
 
         /// <summary>
-        /// Endpoint que retorna a lista com todas as notícias
+        /// Endpoint que retorna a lista paginada com todas as notícias
         /// </summary>
         /// <returns></returns>
         [HttpGet("paged")]

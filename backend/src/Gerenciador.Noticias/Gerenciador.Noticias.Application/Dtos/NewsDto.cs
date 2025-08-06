@@ -1,6 +1,4 @@
 ﻿using Gerenciador.Noticias.Domain.Enums;
-using MongoDB.Bson.Serialization.Attributes;
-using System.Text.Json.Serialization;
 
 namespace Gerenciador.Noticias.Application.Dtos;
 
@@ -15,5 +13,7 @@ public class NewsDto
     public string? Link { get; set; }
     public string Slug { get; set; } = string.Empty;
     public DateTime PublishDate { get; set; } = DateTime.Now;
+    public int CategoryId { get; set; }
+    public MediaType Media { get; set; }
     public Status Status { get; set; }
 }

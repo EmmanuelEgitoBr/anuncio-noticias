@@ -24,6 +24,7 @@ public static class WebApiBuilderExtensions
     public static void AddApplicationConfig(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<INewsService, NewsService>();
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
     }
 

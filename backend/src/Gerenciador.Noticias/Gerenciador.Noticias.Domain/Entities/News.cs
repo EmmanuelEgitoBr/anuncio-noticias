@@ -32,10 +32,24 @@ public class News : BaseEntity
     [BsonElement("publishDate")]
     public DateTime PublishDate { get; set; } = DateTime.Now;
 
+    [BsonElement("categoryId")]
+    public int CategoryId { get; set; }
+
+    [BsonElement("mediaType")]
+    public MediaType Media { get; set; }
+
     [BsonElement("status")]
     public Status Status { get; set; }
 
-    public News(string title, string summary, string text, string author, string imageUrl, string link, Status status)
+    public News(string title, 
+        string summary, 
+        string text, 
+        string author, 
+        string imageUrl, 
+        string link, 
+        int categoryId, 
+        MediaType mediaType, 
+        Status status)
     {
         Summary = summary;
         Title = title;
@@ -44,6 +58,9 @@ public class News : BaseEntity
         ImageUrl = imageUrl;
         Link = link;
         Slug = SlugHelper.GenerateSlug(Title);
+        PublishDate = DateTime.Now;
+        CategoryId = categoryId;
+        Media = mediaType;
         Status = status;
 
         ValidateEntity();
