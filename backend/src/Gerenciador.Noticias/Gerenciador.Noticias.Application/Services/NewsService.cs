@@ -70,13 +70,12 @@ public class NewsService : INewsService
 
         return new PaginatedResult<NewsDto>
         {
-            Items = _mapper.Map<List<NewsDto>>(items),
+            Items = _mapper.Map<List<NewsDto>>(items.Items),
             TotalItems = (int)total,
             Page = filter.Page,
             PageSize = filter.PageSize
         };
     }
-
 
     public async Task<NewsDto> GetNewsByIdAsync(string id)
     {
@@ -86,13 +85,13 @@ public class NewsService : INewsService
 
     public async Task<NewsDto> GetNewsBySlugAsync(string slug)
     {
-        var newsEntity = await _repository.GetBySlugAsync(slug);
+        var newsEntity = await _repository.GetByPropertyAsync(e => e.Slug == slug);
         return _mapper.Map<NewsDto>(newsEntity);
     }
 
     public async Task<NewsDto> CreateNewsAsync(NewsDto newsDto)
     {
-        var entity = new News(newsDto.Hat, newsDto.Title, newsDto.Text, newsDto.Author, newsDto.Image, newsDto.Link, newsDto.Status);
+        var entity = new News(newsDto.Summary, newsDto.Title, newsDto.Text!, newsDto.Author, newsDto.ImageUrl, newsDto.Link!, newsDto.Status);
         await _repository.CreateAsync(entity);
 
         return _mapper.Map<NewsDto>(entity);

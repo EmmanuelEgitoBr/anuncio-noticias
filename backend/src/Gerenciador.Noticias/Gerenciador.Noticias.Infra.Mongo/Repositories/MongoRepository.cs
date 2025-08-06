@@ -2,6 +2,7 @@
 using Gerenciador.Noticias.Domain.Interfaces;
 using Gerenciador.Noticias.Infra.Mongo.Settings;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 
 namespace Gerenciador.Noticias.Infra.Mongo.Repositories;
 
@@ -54,9 +55,9 @@ public class MongoRepository<T> : IMongoRepository<T> where T : BaseEntity
         return await result.FirstOrDefaultAsync();
     }
 
-    public async Task<T?> GetBySlugAsync(string slug)
+    public async Task<T?> GetByPropertyAsync(Expression<Func<T, bool>> predicate)
     {
-        var result = await _repository.FindAsync(x => x.Slug == slug);
+        var result = await _repository.FindAsync(predicate);
         return await result.FirstOrDefaultAsync();
     }
 

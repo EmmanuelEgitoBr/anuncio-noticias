@@ -8,26 +8,40 @@ namespace Gerenciador.Noticias.Domain.Entities;
 
 public class News : BaseEntity
 {
-    [BsonElement("hat")]
-    public string Hat { get; set; }
     [BsonElement("title")]
     public string Title { get; set; }
+    
+    [BsonElement("summary")]
+    public string Summary { get; set; }
+    
     [BsonElement("text")]
     public string Text {  get; set; }
+    
     [BsonElement("author")]
     public string Author {  get; set; } = string.Empty;
-    [BsonElement("image")]
-    public string Image {  get; set; } = string.Empty;
+    
+    [BsonElement("imageUrl")]
+    public string ImageUrl {  get; set; } = string.Empty;
+    
     [BsonElement("link")]
-    public string Link {  get; set; } = string.Empty;
+    public string? Link {  get; set; }
 
-    public News(string hat, string title, string text, string author, string image, string link, Status status)
+    [BsonElement("slug")]
+    public string Slug { get; set; } = string.Empty;
+
+    [BsonElement("publishDate")]
+    public DateTime PublishDate { get; set; } = DateTime.Now;
+
+    [BsonElement("status")]
+    public Status Status { get; set; }
+
+    public News(string title, string summary, string text, string author, string imageUrl, string link, Status status)
     {
-        Hat = hat;
+        Summary = summary;
         Title = title;
         Text = text;
         Author = author;
-        Image = image;
+        ImageUrl = imageUrl;
         Link = link;
         Slug = SlugHelper.GenerateSlug(Title);
         Status = status;
@@ -46,11 +60,11 @@ public class News : BaseEntity
 
     public void ValidateEntity()
     {
-        AssertionConcern.AssertArgumentNotEmpty(Hat, "Chapéu não pode ser vazio");
-        AssertionConcern.AssertArgumentNotEmpty(Title, "Título não pode ser vazio");
-        AssertionConcern.AssertArgumentNotEmpty(Text, "Texto não pode ser vazio");
+        AssertionConcern.AssertArgumentNotEmpty(Summary, "O resumo não pode ser vazio");
+        AssertionConcern.AssertArgumentNotEmpty(Title, "O título não pode ser vazio");
+        AssertionConcern.AssertArgumentNotEmpty(Text, "O texto não pode ser vazio");
 
         AssertionConcern.AssertArgumentLength(Title, 90, "O título não pode ultrapassar 40 caracteres");
-        AssertionConcern.AssertArgumentLength(Hat, 40, "O chapéu não pode ultrapassar 40 caracteres");
+        AssertionConcern.AssertArgumentLength(Summary, 40, "O resumo não pode ultrapassar 40 caracteres");
     }
 }
