@@ -30,6 +30,12 @@ public class NewsService : INewsService
         return _mapper.Map<NewsDto>(newsEntity);
     }
 
+    public async Task<NewsDto> GetNewsBySlugAsync(string slug)
+    {
+        var newsEntity = await _repository.GetBySlugAsync(slug);
+        return _mapper.Map<NewsDto>(newsEntity);
+    }
+
     public async Task<NewsDto> CreateNewsAsync(NewsDto newsDto)
     {
         var entity = new News(newsDto.Hat, newsDto.Title, newsDto.Text, newsDto.Author, newsDto.Image, newsDto.Link, newsDto.Status);

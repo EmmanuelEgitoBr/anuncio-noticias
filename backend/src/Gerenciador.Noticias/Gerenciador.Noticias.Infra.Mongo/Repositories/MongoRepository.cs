@@ -28,6 +28,12 @@ public class MongoRepository<T> : IMongoRepository<T> where T : BaseEntity
         return await result.FirstOrDefaultAsync();
     }
 
+    public async Task<T?> GetBySlugAsync(string slug)
+    {
+        var result = await _repository.FindAsync(x => x.Slug == slug);
+        return await result.FirstOrDefaultAsync();
+    }
+
     public async Task<T> CreateAsync(T entity)
     {
         await _repository.InsertOneAsync(entity);

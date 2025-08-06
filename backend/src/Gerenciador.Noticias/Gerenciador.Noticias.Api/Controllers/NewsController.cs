@@ -48,6 +48,22 @@ namespace Gerenciador.Noticias.Api.Controllers
         }
 
         /// <summary>
+        /// Endpoint que retorna uma notícia a partir do seu slug
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <returns></returns>
+        [HttpGet("{slug}")]
+        public async Task<ActionResult<NewsDto>> GetNewsBySlug(string slug)
+        {
+            var news = await _newsService.GetNewsBySlugAsync(slug);
+
+            if (news is null)
+                return NotFound();
+
+            return news;
+        }
+
+        /// <summary>
         /// Endpoint para criar uma notícia
         /// </summary>
         /// <param name="news"></param>
