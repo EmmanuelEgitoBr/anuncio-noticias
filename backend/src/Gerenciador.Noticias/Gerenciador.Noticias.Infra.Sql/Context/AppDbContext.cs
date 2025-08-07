@@ -10,4 +10,5 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<News> News { get; set; }
+    public DbSet<Category> Categories { get; set; }
 }
