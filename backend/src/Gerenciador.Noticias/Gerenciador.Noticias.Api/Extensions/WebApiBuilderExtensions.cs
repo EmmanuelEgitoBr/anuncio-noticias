@@ -1,6 +1,6 @@
 ﻿using Gerenciador.Noticias.Api.Configurations;
-using Gerenciador.Noticias.Api.Services.Auth.Interfaces;
 using Gerenciador.Noticias.Api.Services.Auth;
+using Gerenciador.Noticias.Api.Services.Auth.Interfaces;
 using Gerenciador.Noticias.Application.Mappings;
 using Gerenciador.Noticias.Application.Services;
 using Gerenciador.Noticias.Application.Services.Interfaces;
@@ -8,14 +8,16 @@ using Gerenciador.Noticias.Domain.Interfaces;
 using Gerenciador.Noticias.Infra.Mongo.Repositories;
 using Gerenciador.Noticias.Infra.Mongo.Settings;
 using Gerenciador.Noticias.Infra.Sql.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
+using MongoDB.Driver;
 using System.Reflection;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using MyMongoSettings = Gerenciador.Noticias.Infra.Mongo.Settings.AppMongoDatabaseSettings;
+
 
 namespace Gerenciador.Noticias.Api.Extensions;
 
@@ -38,11 +40,11 @@ public static class WebApiBuilderExtensions
 
     public static void AddMongoConfig(this WebApplicationBuilder builder)
     {
-        builder.Services.Configure<MongoDatabaseSettings>(
-            builder.Configuration.GetSection("MongoDatabaseSettings"));
+        builder.Services.Configure<AppMongoDatabaseSettings>(
+            builder.Configuration.GetSection("AppMongoDatabaseSettings"));
 
         builder.Services.AddSingleton<IMongoDatabaseSettings>(sp =>
-            sp.GetRequiredService<IOptions<MongoDatabaseSettings>>().Value);
+            sp.GetRequiredService<IOptions<MyMongoSettings>>().Value);
     }
 
     public static void AddCorsConfig(this WebApplicationBuilder builder)
@@ -127,5 +129,30 @@ public static class WebApiBuilderExtensions
                 ClockSkew = TimeSpan.FromMinutes(1)
             };
         });
+    }
+
+    public static void AddHealthChecksConfiguration(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddSingleton<IMongoClient>(sp =>
+            new MongoClient(builder.Configuration
+                .GetSection("AppMongoDatabaseSettings:ConnectionString").Value!.ToString()));
+
+        builder.Services.AddHealthChecks()
+            .AddSqlServer(
+                connectionString: builder.Configuration.GetConnectionString("SqlConnection")!,
+                name: "sqlserver",
+                tags: new[] { "db", "sql" }
+            )
+            .AddMongoDb(
+                clientFactory: sp => sp.GetRequiredService<IMongoClient>(),
+                databaseNameFactory: sp => "api-news",
+                name: "mongodb",
+                tags: ["db", "mongo"]
+            );
+
+        builder.Services.AddHealthChecksUI(setup =>
+        {
+            builder.Configuration.GetSection("HealthChecksUI").Bind(setup);
+        }).AddInMemoryStorage();
     }
 }

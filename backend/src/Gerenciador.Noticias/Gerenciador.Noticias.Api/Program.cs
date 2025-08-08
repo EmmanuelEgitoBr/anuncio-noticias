@@ -1,4 +1,6 @@
 using Gerenciador.Noticias.Api.Extensions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -15,6 +17,7 @@ builder.AddMongoConfig();
 builder.AddSqlConfiguration();
 builder.AddSwaggerDoc();
 builder.AddCorsConfig();
+builder.AddHealthChecksConfiguration();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -35,7 +38,19 @@ app.UseCors("AllowAngular");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    Predicate = _=>true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecksUI(options =>
+{
+    options.UIPath = "/health-ui";
+});
 
 app.MapControllers();
 
