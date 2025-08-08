@@ -21,7 +21,7 @@ public class News : BaseEntity
     public string Author {  get; set; } = string.Empty;
     
     [BsonElement("imageUrl")]
-    public IEnumerable<string> MediaUrl {  get; set; }
+    public List<string>? MediaUrls {  get; set; }
     
     [BsonElement("link")]
     public string? Link {  get; set; }
@@ -37,28 +37,24 @@ public class News : BaseEntity
 
     [BsonElement("status")]
     public Status Status { get; set; }
-
     public News(string title, 
         string summary, 
         string text, 
         string author, 
-        IEnumerable<string> url, 
         string link, 
         int categoryId, 
-        MediaType mediaType, 
-        Status status)
+        MediaType mediaType)
     {
         Summary = summary;
         Title = title;
         Text = text;
         Author = author;
-        MediaUrl = url;
         Link = link;
         Slug = SlugHelper.GenerateSlug(Title);
         CreatedAt = DateTime.Now;
         CategoryId = categoryId;
         Media = mediaType;
-        Status = status;
+        Status = Status.Draft;
 
         ValidateEntity();
     }

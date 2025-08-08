@@ -9,7 +9,7 @@ public class NewsDto
     public string Summary { get; set; } = string.Empty;
     public string? Text { get; set; }
     public string Author { get; set; } = string.Empty;
-    public IEnumerable<string> MediaUrl { get; set; } = new List<string>();
+    public List<string>? MediaUrls { get; set; }
     public string? Link { get; set; }
     public string Slug { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.Now;

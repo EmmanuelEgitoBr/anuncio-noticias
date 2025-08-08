@@ -6,5 +6,11 @@ public class Gallery : BaseEntity
 {
     public string GalleryName { get; set; } = string.Empty;
     public int CategoryId { get; set; }
-    public IEnumerable<News> News { get; set; } = new List<News>();
+    public List<News>? News { get; set; }
+
+    public Gallery(string galleryName, int categoryId)
+    {
+        GalleryName = galleryName;
+        CategoryId = categoryId;
+    }
 }

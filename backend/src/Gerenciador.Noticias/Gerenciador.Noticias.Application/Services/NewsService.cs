@@ -40,14 +40,14 @@ public class NewsService : INewsService
         if (!string.IsNullOrWhiteSpace(filter.Author))
             filters.Add(builder.Regex(x => x.Author, new MongoDB.Bson.BsonRegularExpression(filter.Author, "i")));
 
-        //if (!string.IsNullOrWhiteSpace(filter.Status))
-        //    filters.Add(builder.Eq(x => x.Status.ToString(), filter.Status));
-
         if (!string.IsNullOrWhiteSpace(filter.Status) && 
             Enum.TryParse<Status>(filter.Status, out var parsedStatus))
         {
             filters.Add(builder.Eq(x => x.Status, parsedStatus));
         }
+
+        if (filter.CategoryId > 0)
+            filters.Add(builder.Eq(x => x.CategoryId, filter.CategoryId));
 
         if (filter.DateFrom.HasValue)
             filters.Add(builder.Gte(x => x.CreatedAt, filter.DateFrom.Value));
@@ -95,11 +95,9 @@ public class NewsService : INewsService
             newsDto.Title, 
             newsDto.Text!, 
             newsDto.Author, 
-            newsDto.MediaUrl, 
             newsDto.Link!,
             newsDto.CategoryId,
-            newsDto.Media,
-            newsDto.Status);
+            newsDto.Media);
         await _repository.CreateAsync(entity);
 
         return _mapper.Map<NewsDto>(entity);

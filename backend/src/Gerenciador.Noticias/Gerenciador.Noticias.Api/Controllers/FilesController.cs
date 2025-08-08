@@ -65,7 +65,7 @@ namespace Gerenciador.Noticias.Api.Controllers
 
             var imageUrl = $"{Request.Scheme}://{Request.Host}/images/{webpFileName}";
 
-            newsDto.ImageUrl = imageUrl;
+            newsDto.MediaUrls!.Add(imageUrl);
             
             await _newsService.UpdateNewsAsync(id, newsDto);
 
