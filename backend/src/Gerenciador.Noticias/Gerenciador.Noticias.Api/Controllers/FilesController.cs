@@ -1,4 +1,5 @@
 ﻿using Gerenciador.Noticias.Application.Services.Interfaces;
+using Gerenciador.Noticias.Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
@@ -20,13 +21,13 @@ namespace Gerenciador.Noticias.Api.Controllers
         }
 
         /// <summary>
-        /// Endpoint para upload de imagem para uma notícia
+        /// Endpoint para upload de mídia para uma notícia
         /// </summary>
         /// <param name="id"></param>
         /// <param name="file"></param>
         /// <returns></returns>
-        [HttpPost("{id}/upload-image")]
-        public async Task<IActionResult> UploadImage(string id, IFormFile file)
+        [HttpPost("{id}/upload-media")]
+        public async Task<IActionResult> UploadMedia(string id, IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("Nenhum arquivo enviado.");
@@ -34,13 +35,8 @@ namespace Gerenciador.Noticias.Api.Controllers
             var newsDto = await _newsService.GetNewsByIdAsync(id);
             if (newsDto == null) return NotFound();
 
-            if (newsDto.Media == Domain.Enums.MediaType.Video)
-            {
-                return BadRequest("Válido somente para imagens!!.");
-            }
-
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
 
             if (!allowedExtensions.Contains(extension))
                 return BadRequest("Extensão de arquivo inválida.");
@@ -64,9 +60,9 @@ namespace Gerenciador.Noticias.Api.Controllers
             }
 
             var imageUrl = $"{Request.Scheme}://{Request.Host}/images/{webpFileName}";
-
-            newsDto.MediaUrls!.Add(imageUrl);
+            var media = new Media(imageUrl, Domain.Enums.MediaType.Image);
             
+            newsDto.Medias!.Add(media);
             await _newsService.UpdateNewsAsync(id, newsDto);
 
             return Ok(new

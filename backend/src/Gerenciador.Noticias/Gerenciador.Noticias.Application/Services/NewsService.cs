@@ -96,8 +96,7 @@ public class NewsService : INewsService
             newsDto.Text!, 
             newsDto.Author, 
             newsDto.Link!,
-            newsDto.CategoryId,
-            newsDto.Media);
+            newsDto.CategoryId);
         await _repository.CreateAsync(entity);
 
         return _mapper.Map<NewsDto>(entity);

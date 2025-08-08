@@ -10,5 +10,7 @@ public class NewsMap : IEntityTypeConfiguration<News>
     {
         builder.Property(n => n.Id).ValueGeneratedOnAdd();
         builder.HasKey(n => n.Id);
+
+        builder.Ignore(n => n.Medias);
     }
 }

@@ -2,6 +2,7 @@
 using Gerenciador.Noticias.Domain.Enums;
 using Gerenciador.Noticias.Domain.Helpers;
 using Gerenciador.Noticias.Domain.Validators;
+using Gerenciador.Noticias.Domain.ValueObjects;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Gerenciador.Noticias.Domain.Entities;
@@ -21,7 +22,7 @@ public class News : BaseEntity
     public string Author {  get; set; } = string.Empty;
     
     [BsonElement("imageUrl")]
-    public List<string>? MediaUrls {  get; set; }
+    public List<Media>? Medias {  get; set; }
     
     [BsonElement("link")]
     public string? Link {  get; set; }
@@ -32,9 +33,6 @@ public class News : BaseEntity
     [BsonElement("categoryId")]
     public int CategoryId { get; set; }
 
-    [BsonElement("mediaType")]
-    public MediaType Media { get; set; }
-
     [BsonElement("status")]
     public Status Status { get; set; }
     public News(string title, 
@@ -42,8 +40,7 @@ public class News : BaseEntity
         string text, 
         string author, 
         string link, 
-        int categoryId, 
-        MediaType mediaType)
+        int categoryId)
     {
         Summary = summary;
         Title = title;
@@ -53,7 +50,6 @@ public class News : BaseEntity
         Slug = SlugHelper.GenerateSlug(Title);
         CreatedAt = DateTime.Now;
         CategoryId = categoryId;
-        Media = mediaType;
         Status = Status.Draft;
 
         ValidateEntity();
