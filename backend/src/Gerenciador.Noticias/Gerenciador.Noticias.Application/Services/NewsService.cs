@@ -50,18 +50,18 @@ public class NewsService : INewsService
         }
 
         if (filter.DateFrom.HasValue)
-            filters.Add(builder.Gte(x => x.PublishDate, filter.DateFrom.Value));
+            filters.Add(builder.Gte(x => x.CreatedAt, filter.DateFrom.Value));
 
         if (filter.DateTo.HasValue)
-            filters.Add(builder.Lte(x => x.PublishDate, filter.DateTo.Value));
+            filters.Add(builder.Lte(x => x.CreatedAt, filter.DateTo.Value));
 
         if (filters.Any())
             mongoFilter = builder.And(filters);
 
         // Monta sort dinâmico
         var sort = filter.OrderDirection?.ToLower() == "asc"
-            ? Builders<News>.Sort.Ascending(filter.OrderBy ?? "PublishDate")
-            : Builders<News>.Sort.Descending(filter.OrderBy ?? "PublishDate");
+            ? Builders<News>.Sort.Ascending(filter.OrderBy ?? "CreatedAt")
+            : Builders<News>.Sort.Descending(filter.OrderBy ?? "CreatedAt");
 
         // Paginação
         var total = await _repository.CountAsync(mongoFilter);
@@ -95,7 +95,7 @@ public class NewsService : INewsService
             newsDto.Title, 
             newsDto.Text!, 
             newsDto.Author, 
-            newsDto.ImageUrl, 
+            newsDto.MediaUrl, 
             newsDto.Link!,
             newsDto.CategoryId,
             newsDto.Media,

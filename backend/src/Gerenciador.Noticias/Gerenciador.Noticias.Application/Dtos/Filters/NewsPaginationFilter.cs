@@ -12,6 +12,6 @@ public class NewsPaginationFilter
     public DateTime? DateFrom { get; set; }
     public DateTime? DateTo { get; set; }
 
-    public string? OrderBy { get; set; } = "PublishDate";
+    public string? OrderBy { get; set; } = "CreatedAt";
     public string? OrderDirection { get; set; } = "desc";
 }

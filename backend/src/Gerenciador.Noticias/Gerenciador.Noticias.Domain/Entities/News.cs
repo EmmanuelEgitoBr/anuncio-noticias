@@ -21,16 +21,13 @@ public class News : BaseEntity
     public string Author {  get; set; } = string.Empty;
     
     [BsonElement("imageUrl")]
-    public string ImageUrl {  get; set; } = string.Empty;
+    public IEnumerable<string> MediaUrl {  get; set; }
     
     [BsonElement("link")]
     public string? Link {  get; set; }
 
     [BsonElement("slug")]
     public string Slug { get; set; } = string.Empty;
-
-    [BsonElement("publishDate")]
-    public DateTime PublishDate { get; set; } = DateTime.Now;
 
     [BsonElement("categoryId")]
     public int CategoryId { get; set; }
@@ -45,7 +42,7 @@ public class News : BaseEntity
         string summary, 
         string text, 
         string author, 
-        string imageUrl, 
+        IEnumerable<string> url, 
         string link, 
         int categoryId, 
         MediaType mediaType, 
@@ -55,10 +52,10 @@ public class News : BaseEntity
         Title = title;
         Text = text;
         Author = author;
-        ImageUrl = imageUrl;
+        MediaUrl = url;
         Link = link;
         Slug = SlugHelper.GenerateSlug(Title);
-        PublishDate = DateTime.Now;
+        CreatedAt = DateTime.Now;
         CategoryId = categoryId;
         Media = mediaType;
         Status = status;
