@@ -22,6 +22,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new NewsMap());
         modelBuilder.ApplyConfiguration(new CategoryMap());
         modelBuilder.ApplyConfiguration(new GalleryMap());
+        modelBuilder.ApplyConfiguration(new UserMap());
 
         base.OnModelCreating(modelBuilder);
     }

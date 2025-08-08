@@ -1,4 +1,7 @@
-﻿using Gerenciador.Noticias.Application.Mappings;
+﻿using Gerenciador.Noticias.Api.Configurations;
+using Gerenciador.Noticias.Api.Services.Auth.Interfaces;
+using Gerenciador.Noticias.Api.Services.Auth;
+using Gerenciador.Noticias.Application.Mappings;
 using Gerenciador.Noticias.Application.Services;
 using Gerenciador.Noticias.Application.Services.Interfaces;
 using Gerenciador.Noticias.Domain.Interfaces;
@@ -10,6 +13,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Gerenciador.Noticias.Api.Extensions;
 
@@ -26,6 +32,7 @@ public static class WebApiBuilderExtensions
         builder.Services.AddScoped<INewsService, NewsService>();
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IGalleryService, GalleryService>();
+        builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
     }
 
@@ -84,6 +91,41 @@ public static class WebApiBuilderExtensions
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
             options.EnableSensitiveDataLogging();
+        });
+    }
+
+    public static void AddAuthConfiguration(this WebApplicationBuilder builder)
+    {
+        // Jwt settings bind
+        builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+        var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()!;
+
+        // Add JwtService
+        builder.Services.AddScoped<IJwtService, JwtService>();
+
+        // Authentication setup
+        var key = Encoding.UTF8.GetBytes(jwtSettings.Secret);
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidateAudience = true,
+                ValidAudience = jwtSettings.Audience,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromMinutes(1)
+            };
         });
     }
 }
