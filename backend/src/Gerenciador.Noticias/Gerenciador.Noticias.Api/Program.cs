@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 
 builder.Services.AddControllers();
 builder.AddAutoMapperConfiguration();
+builder.AddRedisConfiguration();
 builder.AddApplicationConfig();
 builder.AddMongoConfig();
 builder.AddSqlConfiguration();

@@ -3,6 +3,8 @@ using Gerenciador.Noticias.Api.Services.Auth;
 using Gerenciador.Noticias.Api.Services.Auth.Interfaces;
 using Gerenciador.Noticias.Application.Mappings;
 using Gerenciador.Noticias.Application.Services;
+using Gerenciador.Noticias.Application.Services.Cache;
+using Gerenciador.Noticias.Application.Services.Cache.Interfaces;
 using Gerenciador.Noticias.Application.Services.Interfaces;
 using Gerenciador.Noticias.Domain.Interfaces;
 using Gerenciador.Noticias.Infra.Mongo.Repositories;
@@ -10,6 +12,7 @@ using Gerenciador.Noticias.Infra.Mongo.Settings;
 using Gerenciador.Noticias.Infra.Sql.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -36,6 +39,9 @@ public static class WebApiBuilderExtensions
         builder.Services.AddScoped<IGalleryService, GalleryService>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+
+        builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
+        builder.Services.AddSingleton<ICacheService, RedisCacheService>();
     }
 
     public static void AddMongoConfig(this WebApplicationBuilder builder)
@@ -141,7 +147,7 @@ public static class WebApiBuilderExtensions
             .AddSqlServer(
                 connectionString: builder.Configuration.GetConnectionString("SqlConnection")!,
                 name: "sqlserver",
-                tags: new[] { "db", "sql" }
+                tags: ["db", "sql"]
             )
             .AddMongoDb(
                 clientFactory: sp => sp.GetRequiredService<IMongoClient>(),
@@ -155,4 +161,14 @@ public static class WebApiBuilderExtensions
             builder.Configuration.GetSection("HealthChecksUI").Bind(setup);
         }).AddInMemoryStorage();
     }
+
+    public static void AddRedisConfiguration(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration.GetConnectionString("Redis");
+            options.InstanceName = "MeuApp:"; // prefixo das chaves no Redis
+        });
+    }
+
 }
