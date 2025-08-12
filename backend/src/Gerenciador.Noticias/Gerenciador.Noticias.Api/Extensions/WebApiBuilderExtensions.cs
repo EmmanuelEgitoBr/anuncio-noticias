@@ -154,7 +154,12 @@ public static class WebApiBuilderExtensions
                 databaseNameFactory: sp => "api-news",
                 name: "mongodb",
                 tags: ["db", "mongo"]
-            );
+            )
+            .AddRedis(
+                redisConnectionString: builder.Configuration.GetConnectionString("RedisConnection")!,
+                name: "redis",
+                tags: ["cache", "redis"]
+    );
 
         builder.Services.AddHealthChecksUI(setup =>
         {
@@ -166,7 +171,7 @@ public static class WebApiBuilderExtensions
     {
         builder.Services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = builder.Configuration.GetConnectionString("Redis");
+            options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
             options.InstanceName = "MeuApp:"; // prefixo das chaves no Redis
         });
     }
