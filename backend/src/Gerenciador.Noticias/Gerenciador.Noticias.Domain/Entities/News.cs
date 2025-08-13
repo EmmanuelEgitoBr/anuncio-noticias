@@ -31,7 +31,7 @@ public class News : BaseEntity
     public string Slug { get; set; } = string.Empty;
 
     [BsonElement("categoryId")]
-    public int CategoryId { get; set; }
+    public string CategoryId { get; set; }
 
     [BsonElement("status")]
     public Status Status { get; set; }
@@ -40,7 +40,7 @@ public class News : BaseEntity
         string text, 
         string author, 
         string link, 
-        int categoryId)
+        string categoryId)
     {
         Summary = summary;
         Title = title;

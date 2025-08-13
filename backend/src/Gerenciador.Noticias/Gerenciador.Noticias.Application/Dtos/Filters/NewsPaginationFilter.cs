@@ -8,7 +8,7 @@ public class NewsPaginationFilter
     public string? Title { get; set; }
     public string? Author { get; set; }
     public string? Status { get; set; }
-    public int CategoryId { get; set; }
+    public string CategoryId { get; set; } = string.Empty;
 
     public DateTime? DateFrom { get; set; }
     public DateTime? DateTo { get; set; }

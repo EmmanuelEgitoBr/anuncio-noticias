@@ -46,7 +46,7 @@ public class NewsService : INewsService
             filters.Add(builder.Eq(x => x.Status, parsedStatus));
         }
 
-        if (filter.CategoryId > 0)
+        if (String.IsNullOrEmpty(filter.CategoryId))
             filters.Add(builder.Eq(x => x.CategoryId, filter.CategoryId));
 
         if (filter.DateFrom.HasValue)

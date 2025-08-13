@@ -1,15 +1,18 @@
+version: '3.9'
+
 services:
   api:
     build:
       context: .
       dockerfile: src/Gerenciador.Noticias/Gerenciador.Noticias.Api/Dockerfile
     ports:
-      - "5000:80" # http://localhost:5000
+      - "5000:80"
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__RedisConnection=redis:6379
+      - ConnectionStrings__RedisConnection=redis:6379,abortConnect=false,connectTimeout=15000
 
   redis:
     image: redis:7.0
@@ -18,6 +21,12 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: always
 
 volumes:
   redis_data:

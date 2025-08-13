@@ -62,7 +62,7 @@ public class GalleryService : IGalleryService
 
         var filters = new List<FilterDefinition<Gallery>>();
 
-        if (filter.CategoryId > 0)
+        if (!String.IsNullOrEmpty(filter.CategoryId))
             filters.Add(builder.Eq(x => x.CategoryId, filter.CategoryId));
 
         if (filter.DateFrom.HasValue)
@@ -117,12 +117,16 @@ public class GalleryService : IGalleryService
 
     public async Task<GalleryDto> CreateGalleryAsync(GalleryDto galleryDto)
     {
-        var entity = new Gallery(galleryDto.GalleryName, galleryDto.CategoryId);
+        Gallery entity = new Gallery(galleryDto.GalleryName, galleryDto.CategoryId, galleryDto.News);
+        
         await _galleryRepository.CreateAsync(entity);
+
+        galleryDto.Id= entity.Id;
+        galleryDto.CreatedAt = entity.CreatedAt;
 
         await _cacheService.RemoveAsync(cacheKeyGalleryList);
 
-        return _mapper.Map<GalleryDto>(entity);
+        return galleryDto;
     }
 
     public async Task<GalleryDto> AddNewsToGalleryAsync(string galleryId, string newsId)
