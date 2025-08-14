@@ -42,6 +42,7 @@ public static class WebApiBuilderExtensions
 
         builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
         builder.Services.AddSingleton<ICacheService, RedisCacheService>();
+        builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
     }
 
     public static void AddMongoConfig(this WebApplicationBuilder builder)

@@ -43,10 +43,11 @@ public class GalleryService : IGalleryService
         if (cached != null) return cached;
 
         var galleryListEntity = await _galleryRepository.GetAsync();
+        var result = _mapper.Map<List<GalleryDto>>(galleryListEntity);
 
-        await _cacheService.SetAsync(cacheKeyGalleryList, galleryListEntity, TimeSpan.FromMinutes(5));
+        await _cacheService.SetAsync(cacheKeyGalleryList, result, TimeSpan.FromMinutes(60));
 
-        return _mapper.Map<List<GalleryDto>>(galleryListEntity);
+        return result;
     }
 
     public async Task<PaginatedResult<GalleryDto>> GetPaginatedGalleryListAsync(GalleryPaginationFilter filter)
